@@ -1,4 +1,4 @@
-import { interviewCovers } from '@/constants';
+
 import { getRandomInterviewCover } from '@/lib/utils';
 import dayjs from 'dayjs';
 import Image from 'next/image';
