@@ -49,16 +49,23 @@ export async function signUp(params: SignUpParams) {
       success: true,
       message: "Account created successfully. Please sign in.",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error creating user:", error);
 
-    // Handle Firebase specific errors
-    if (error.code === "auth/email-already-exists") {
+    if (error instanceof Error && (error as { code?: string }).code === "auth/email-already-exists") {
       return {
         success: false,
         message: "This email is already in use",
       };
     }
+
+    // Handle Firebase specific errors
+    // if (typeof error === "object" && error !== null && "code" in error && (error as { code?: string }).code === "auth/email-already-exists") {
+    //   return {
+    //     success: false,
+    //     message: "This email is already in use",
+    //   };
+    // }
 
     return {
       success: false,
@@ -79,8 +86,8 @@ export async function signIn(params: SignInParams) {
       };
 
     await setSessionCookie(idToken);
-  } catch (error: any) {
-    console.log("");
+  } catch (error) {
+    console.log("" + error);
 
     return {
       success: false,
